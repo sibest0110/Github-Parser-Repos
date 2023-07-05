@@ -1,0 +1,58 @@
+html{
+   --default-hover-color: rgba(74, 135, 163, 0.24);
+}
+
+table {
+
+   font-size: 18px;
+   border-collapse: collapse;
+   text-align: left;
+   width: 100%;
+}
+
+tbody td,
+thead th {
+   border: solid 2px rgb(74, 135, 163);
+}
+
+#per_list {
+   display: flex;
+   justify-content: right;
+}
+
+.but_per_list {
+   font-size: 18px;
+   text-align: center;
+   border-radius: 30%;
+   border: solid 2px rgb(74, 135, 163);
+
+   height: 100%;
+   width: 30px;
+
+   margin-left: 3px;
+
+   cursor: pointer;
+   
+   /* Чтобы не было возможности выделить текст */
+   /* iOS Safari */
+   -webkit-touch-callout: none;
+   /* Safari */
+   -webkit-user-select: none;
+   /* Konqueror HTML */
+   -khtml-user-select: none;
+   /* Old versions of Firefox */
+   -moz-user-select: none;
+   /* Internet Explorer/Edge */
+   -ms-user-select: none;
+   /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+   user-select: none;
+}
+
+tbody tr:hover {
+   background-color: var(--default-hover-color) !important;
+   
+}
+
+.but_per_list:hover {
+   background-color: var(--default-hover-color) !important;
+}
