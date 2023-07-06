@@ -7,7 +7,7 @@
     <title>Название вкладки</title>
 </head>
 
-<body onload="InitPage();">
+<body onload="/*InitPage();*/">
     <div id="work_place">
         <table id="table_repos">
             <thead>
@@ -22,13 +22,20 @@
             <tbody id="table_body">
 
             </tbody>
-            <tfoot style="text-align: right;">
+            <tfoot>
                 <tr>
                     <td colspan="5">
-                        <div id="per_list">
-                            <div class="but_per_list" id="but_per_list_10" onclick="ButtonPerList_Handler(this)">10</div>
-                            <div class="but_per_list" id="but_per_list_50" onclick="ButtonPerList_Handler(this)">50</div>
-                            <div class="but_per_list" id="but_per_list_100" onclick="ButtonPerList_Handler(this)">100</div>
+                        <div id="tfoot_container">
+                            <div id="page_selector">
+                                <div class="tfoot_button" id="but_page_prev">&lt;</div>
+                                <div class="tfoot_button" id="but_page_cur">1</div>
+                                <div class="tfoot_button" id="but_page_next">&gt;</div>
+                            </div>
+                            <div id="per_list">
+                                <div class="tfoot_button" id="but_per_list_10" onclick="ButtonPerList_Handler(this)">10</div>
+                                <div class="tfoot_button" id="but_per_list_50" onclick="ButtonPerList_Handler(this)">50</div>
+                                <div class="tfoot_button" id="but_per_list_100" onclick="ButtonPerList_Handler(this)">100</div>
+                            </div>
                         </div>
                     </td>
                 </tr>

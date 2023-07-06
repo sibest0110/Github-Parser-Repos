@@ -3,7 +3,6 @@ html{
 }
 
 table {
-
    font-size: 18px;
    border-collapse: collapse;
    text-align: left;
@@ -15,12 +14,34 @@ thead th {
    border: solid 2px rgb(74, 135, 163);
 }
 
+
+/* Нижняя строчка таблицы vvv */
+#tfoot_container{
+   display: flex;
+   justify-content: space-between;
+}
+
+#page_selector {
+   display: flex;
+   justify-content: left;
+   margin-top: auto;
+}
+
 #per_list {
    display: flex;
    justify-content: right;
+   margin-top: auto;
 }
 
-.but_per_list {
+#page_selector div{
+   margin-right: 3px;
+}
+
+#per_list div{
+   margin-left: 3px;
+}
+
+.tfoot_button{
    font-size: 18px;
    text-align: center;
    border-radius: 30%;
@@ -28,8 +49,6 @@ thead th {
 
    height: 100%;
    width: 30px;
-
-   margin-left: 3px;
 
    cursor: pointer;
    
@@ -53,6 +72,7 @@ tbody tr:hover {
    
 }
 
-.but_per_list:hover {
+.tfoot_button:hover {
    background-color: var(--default-hover-color) !important;
 }
+/* Нижняя строчка таблицы ^^^ */
