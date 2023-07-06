@@ -122,7 +122,7 @@ function BuildTableBody(objectsRepo, rootTBody) {
         let cols = [
             CreateTD(repo["name"]),
             CreateTD(repo["language"]),
-            CreateTD(FormatDate(repo["pushed_at"], 'M d.m.y H:M')),
+            CreateTD(FormatDate(repo["pushed_at"], 'd.m.y H:M')),
             CreateTD(repo["archived"] == true ? 'да' : 'нет'),
             CreateTD(repo["html_url"], true),
         ]
