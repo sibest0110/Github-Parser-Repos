@@ -27,9 +27,9 @@
                     <td colspan="5">
                         <div id="tfoot_container">
                             <div id="page_selector">
-                                <div class="tfoot_button" id="but_page_prev">&lt;</div>
-                                <div class="tfoot_button" id="but_page_cur">1</div>
-                                <div class="tfoot_button" id="but_page_next">&gt;</div>
+                                <div class="tfoot_button" id="but_page_prev" onclick="ButtonChangePage_handler(currentPage-1);">&lt;</div>
+                                <div class="tfoot_button" id="but_page_cur" ondblclick="ButtonChangePage_handler(1);">1</div>
+                                <div class="tfoot_button" id="but_page_next" onclick="ButtonChangePage_handler(currentPage+1);">&gt;</div>
                             </div>
                             <div id="per_list">
                                 <div class="tfoot_button" id="but_per_list_10" onclick="ButtonPerList_Handler(this)">10</div>

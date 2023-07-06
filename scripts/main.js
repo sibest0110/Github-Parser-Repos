@@ -10,9 +10,18 @@ function InitPage() {
     b10.dispatchEvent(new Event("click"));
 }
 
+function GetPressedButtonPerList() {
+    return document.getElementById('but_per_list_' + currentPerPage);
+}
+
+function ButtonChangePage_handler(page) {
+    currentPage = page;
+    document.getElementById("but_page_cur").textContent = currentPage;
+    GetReposFromWeb(currentPerPage, currentPage);
+}
+
 function ButtonPerList_Handler(but) {
     GetReposFromWeb(but.id.split('_').pop(), currentPage);
-    but.style.backgroundColor = 'rgb(137, 156, 165)';
 }
 
 function GetReposFromWeb(repoPerPage, page=1) {
@@ -29,8 +38,16 @@ function GetReposFromWeb(repoPerPage, page=1) {
     }
     reposAsObjects = [];
     document.querySelectorAll('.tfoot_button').forEach(b=>b.style.backgroundColor = 'white');
-    // // // // // // // // // // 
+    GetPressedButtonPerList().style.backgroundColor = 'rgb(137, 156, 165)';
+    
+    // Прятать кнопку Назад, если на 1 странице
+    if (currentPage == 1)
+        document.getElementById('but_page_prev').style.display='none';
+    else
+        document.getElementById('but_page_prev').style.display='block';
 
+
+    // Web запрос
     let resp = fetch(url, { method: 'GET' });
     if (resp.then(r => r.status == 200)) {
         resp
