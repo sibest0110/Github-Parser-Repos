@@ -32,10 +32,7 @@ function GetReposFromWeb(repoPerPage, page=1) {
     currentPage = page;
     currentPerPage = repoPerPage;
 
-    // Очистка таблицы и обновление элементов перед загрузкой
-    while (tbody.hasChildNodes()) {
-        tbody.removeChild(tbody.lastChild);
-    }
+    // Обновление элементов перед загрузкой
     reposAsObjects = [];
     document.querySelectorAll('.tfoot_button').forEach(b=>b.style.backgroundColor = 'white');
     GetPressedButtonPerList().style.backgroundColor = 'rgb(137, 156, 165)';
@@ -49,26 +46,33 @@ function GetReposFromWeb(repoPerPage, page=1) {
 
     // Web запрос
     let resp = fetch(url, { method: 'GET' });
-    if (resp.then(r => r.status == 200)) {
-        resp
-            .then(r => r.json())
-            .then(jsons => {
-                for (const j of jsons) {
-                    name_1 = j.name;
-                    lang_2 = j.language;
-                    pushed_3 = FormatDate(j.pushed_at, 'd.m.y H:M');
-                    arch_4 = j.archived == true ? 'да' : 'нет';
-                    link_5 = j.html_url;
+    resp.then(r =>{
+        r.json().then(json => {
+            if (r.status!=200){
+                alert(`HTTP status code = ${r.status}\n\n${json['message']}`);
+                return;
+            }
 
-                    let objRepo = CreateObjectRepo(name_1, lang_2, pushed_3, arch_4, link_5);
-                    reposAsObjects.push(objRepo);
-                    BuildTableBody([objRepo], tbody);
-                };
-            });
-    }
-    else {
-        alert('Не удалось обратиться к апи гитхаба');
-    }
+            // Если ответ успешный
+            // Очистка таблицы после успешной загрузки
+            while (tbody.hasChildNodes()) {
+                tbody.removeChild(tbody.lastChild);
+            }
+
+            // Обработка ответа
+            for (const j of json) {
+                name_1 = j.name;
+                lang_2 = j.language;
+                pushed_3 = FormatDate(j.pushed_at, 'd.m.y H:M');
+                arch_4 = j.archived == true ? 'да' : 'нет';
+                link_5 = j.html_url;
+    
+                let objRepo = CreateObjectRepo(name_1, lang_2, pushed_3, arch_4, link_5);
+                reposAsObjects.push(objRepo);
+                BuildTableBody([objRepo], tbody);
+            };
+        });
+    });
 }
 
 function BuildTableBody(objectsRepo, rootTBody) {
