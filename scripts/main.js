@@ -1,8 +1,8 @@
 // GLOBALs
-let reposAsObjects = [];
 let currentPage = 1;
 let currentPerPage = 10;
-
+let reposAsObjects = [];
+let tbody = document.getElementById("table_body");
 
 // FUNCTIONs
 function InitPage() {
@@ -24,16 +24,7 @@ function ButtonPerList_Handler(but) {
     GetReposFromWeb(but.id.split('_').pop(), currentPage);
 }
 
-function GetReposFromWeb(repoPerPage, page=1) {
-    let url = `https://api.github.com/orgs/microsoft/repos?per_page=${repoPerPage}&page=${page}`;
-    let tbody = document.getElementById("table_body");
-
-    // Актуализация глобальных переменных
-    currentPage = page;
-    currentPerPage = repoPerPage;
-
-    // Обновление элементов перед загрузкой
-    reposAsObjects = [];
+function UpdateElementsBeforTableBuilding(params) {
     document.querySelectorAll('.tfoot_button').forEach(b=>b.style.backgroundColor = 'white');
     GetPressedButtonPerList().style.backgroundColor = 'rgb(137, 156, 165)';
     
@@ -42,6 +33,62 @@ function GetReposFromWeb(repoPerPage, page=1) {
         document.getElementById('but_page_prev').style.display='none';
     else
         document.getElementById('but_page_prev').style.display='block';
+}
+
+function SortObjectsByProperty(objects, property = '', ascending = true) {
+    if (property === ''){
+        return objects;
+    }
+
+    let sorted = objects.sort(function(a,b){
+        if (!ascending) {
+            [a, b] = [b, a];
+        }
+        
+        // Формата даты
+        if (property === 'pushed_at') {
+            if (Date.parse(a[property]) > Date.parse(b[property])) {
+                return 1;
+            }
+            if (Date.parse(a[property]) < Date.parse(b[property])) {
+                return -1;
+            }
+            return 0;
+        }
+        // Формата строки
+        else
+        {
+            if (a[property].toLowerCase() > b[property].toLowerCase()) {
+                return 1;
+            }
+            if (a[property].toLowerCase() < b[property].toLowerCase()) {
+                return -1;
+            }
+            return 0;
+        }
+    });
+    return sorted;
+}
+
+function GetReposFromObjects(reposObjects, columnSort = '', ascending = false) {
+    // Очистка таблицы от предыдущих значений
+    while (tbody.hasChildNodes()) {
+        tbody.removeChild(tbody.lastChild);
+    }
+
+    BuildTableBody(SortObjectsByProperty(reposObjects, columnSort, ascending), tbody);
+}
+
+function GetReposFromWeb(repoPerPage, page=1) {
+    let url = `https://api.github.com/orgs/microsoft/repos?per_page=${repoPerPage}&page=${page}`;
+
+    // Актуализация глобальных переменных
+    currentPage = page;
+    currentPerPage = repoPerPage;
+
+    // Обновление элементов перед загрузкой
+    reposAsObjects = [];
+    UpdateElementsBeforTableBuilding();
 
 
     // Web запрос
@@ -61,13 +108,7 @@ function GetReposFromWeb(repoPerPage, page=1) {
 
             // Обработка ответа
             for (const j of json) {
-                name_1 = j.name;
-                lang_2 = j.language;
-                pushed_3 = FormatDate(j.pushed_at, 'd.m.y H:M');
-                arch_4 = j.archived == true ? 'да' : 'нет';
-                link_5 = j.html_url;
-    
-                let objRepo = CreateObjectRepo(name_1, lang_2, pushed_3, arch_4, link_5);
+                let objRepo = CreateObjectRepo(j.name, j.language, j.pushed_at, j.archived, j.html_url);
                 reposAsObjects.push(objRepo);
                 BuildTableBody([objRepo], tbody);
             };
@@ -81,8 +122,8 @@ function BuildTableBody(objectsRepo, rootTBody) {
         let cols = [
             CreateTD(repo["name"]),
             CreateTD(repo["language"]),
-            CreateTD(repo["pushed_at"]),
-            CreateTD(repo["archived"]),
+            CreateTD(FormatDate(repo["pushed_at"], 'M d.m.y H:M')),
+            CreateTD(repo["archived"] == true ? 'да' : 'нет'),
             CreateTD(repo["html_url"], true),
         ]
         cols.forEach(r => row.appendChild(r));
