@@ -108,7 +108,7 @@ function GetReposFromWeb(repoPerPage, page=1) {
 
             // Обработка ответа
             for (const j of json) {
-                let objRepo = CreateObjectRepo(j.name, j.language, j.pushed_at, j.archived, j.html_url);
+                let objRepo = CreateObjectRepo(j.name, j.language ?? '', j.pushed_at, j.archived, j.html_url);
                 reposAsObjects.push(objRepo);
                 BuildTableBody([objRepo], tbody);
             };
