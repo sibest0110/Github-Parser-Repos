@@ -1,5 +1,7 @@
 // GLOBALs
 let reposAsObjects = [];
+let currentPage = 1;
+let currentPerPage = 10;
 
 
 // FUNCTIONs
@@ -9,20 +11,25 @@ function InitPage() {
 }
 
 function ButtonPerList_Handler(but) {
-    document.querySelectorAll('.but_per_list').forEach(b=>b.style.backgroundColor = 'white');
+    GetReposFromWeb(but.id.split('_').pop(), currentPage);
     but.style.backgroundColor = 'rgb(137, 156, 165)';
-    GetReposFromWeb(but.id.split('_').pop());
 }
 
-function GetReposFromWeb(repoPerPage) {
-    let url = `https://api.github.com/orgs/microsoft/repos?per_page=${repoPerPage}`;
+function GetReposFromWeb(repoPerPage, page=1) {
+    let url = `https://api.github.com/orgs/microsoft/repos?per_page=${repoPerPage}&page=${page}`;
     let tbody = document.getElementById("table_body");
 
-    // Очистка таблицы перед загрузкой
+    // Актуализация глобальных переменных
+    currentPage = page;
+    currentPerPage = repoPerPage;
+
+    // Очистка таблицы и обновление элементов перед загрузкой
     while (tbody.hasChildNodes()) {
         tbody.removeChild(tbody.lastChild);
     }
     reposAsObjects = [];
+    document.querySelectorAll('.tfoot_button').forEach(b=>b.style.backgroundColor = 'white');
+    // // // // // // // // // // 
 
     let resp = fetch(url, { method: 'GET' });
     if (resp.then(r => r.status == 200)) {
