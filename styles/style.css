@@ -14,6 +14,14 @@ thead th {
    border: solid 2px rgb(74, 135, 163);
 }
 
+/* Сортировка столбцов vvv */
+.colRepo[data-order="-1"]::before{
+   content: "▼";
+}
+.colRepo[data-order="1"]::before{
+   content: "▲";
+}
+/* Сортировка столбцов ^^^ */
 
 /* Нижняя строчка таблицы vvv */
 #tfoot_container{

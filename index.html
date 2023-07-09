@@ -19,11 +19,11 @@
             </colgroup>
             <thead>
                 <tr>
-                    <th>Репозиторий</th>
-                    <th>Язык программирования</th>
-                    <th>Последний Push</th>
-                    <th>Архивный</th>
-                    <th>Ссылка</th>
+                    <th data-order="0" class="colRepo" id="colRepo_name" onclick="SortColumn_handler(this)">Репозиторий</th>
+                    <th data-order="0" class="colRepo" id="colRepo_language" onclick="SortColumn_handler(this)">Язык программирования</th>
+                    <th data-order="0" class="colRepo" id="colRepo_pushed_at" onclick="SortColumn_handler(this)">Последний Push</th>
+                    <th data-order="0" class="colRepo" id="colRepo_archived" onclick="SortColumn_handler(this)">Архивный</th>
+                    <th data-order="0" class="colRepo" id="colRepo_html_url">Ссылка</th>
                 </tr>
             </thead>
             <tbody id="table_body">

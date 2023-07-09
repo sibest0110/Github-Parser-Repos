@@ -10,9 +10,7 @@ function InitPage() {
     b10.dispatchEvent(new Event("click"));
 }
 
-function GetPressedButtonPerList() {
-    return document.getElementById('but_per_list_' + currentPerPage);
-}
+//#region Обработчики кнопок внизу таблицы
 
 function ButtonChangePage_handler(page) {
     currentPage = page;
@@ -23,24 +21,41 @@ function ButtonChangePage_handler(page) {
 function ButtonPerList_Handler(but) {
     GetReposFromWeb(but.id.split('_').pop(), currentPage);
 }
+//#endregion
 
-function UpdateElementsBeforTableBuilding(params) {
-    document.querySelectorAll('.tfoot_button').forEach(b=>b.style.backgroundColor = 'white');
-    GetPressedButtonPerList().style.backgroundColor = 'rgb(137, 156, 165)';
-    
-    // Прятать кнопку Назад, если на 1 странице
-    if (currentPage == 1)
-        document.getElementById('but_page_prev').style.display='none';
-    else
-        document.getElementById('but_page_prev').style.display='block';
+
+//#region Сортировка
+
+function SortColumn_handler(columnHead) {
+    let propName = columnHead.id.replace('colRepo_', '');
+    let order = Number(columnHead.dataset.order);
+    order = order == 1 ? -1 : order + 1;
+
+    RestToZeroColumnOrder();
+    columnHead.dataset.order = order;
+    switch (order) {
+        case -1:
+            GetReposFromObjects(reposAsObjects, propName, false);
+            break;
+        case 1:
+            GetReposFromObjects(reposAsObjects, propName, true);
+            break;
+        default:
+            GetReposFromObjects(reposAsObjects, propName);
+            break;
+    }
 }
 
+// !!!приватная бы
 function SortObjectsByProperty(objects, property = '', ascending = true) {
     if (property === ''){
         return objects;
     }
 
-    let sorted = objects.sort(function(a,b){
+    let sorted = [];
+    Object.assign(sorted, objects);
+
+    sorted.sort(function(a,b){
         if (!ascending) {
             [a, b] = [b, a];
         }
@@ -58,24 +73,33 @@ function SortObjectsByProperty(objects, property = '', ascending = true) {
         // Формата строки
         else
         {
-            if (a[property].toLowerCase() > b[property].toLowerCase()) {
+            if (String(a[property]).toLowerCase() > String(b[property]).toLowerCase()) {
                 return 1;
             }
-            if (a[property].toLowerCase() < b[property].toLowerCase()) {
+            if (String(a[property]).toLowerCase() < String(b[property]).toLowerCase()) {
                 return -1;
             }
             return 0;
         }
     });
+
     return sorted;
 }
+//#endregion
 
-function GetReposFromObjects(reposObjects, columnSort = '', ascending = false) {
+
+//#region Формирование таблиц
+
+function GetReposFromObjects(reposObjects, columnSort = '', ascending = null) {
     // Очистка таблицы от предыдущих значений
     while (tbody.hasChildNodes()) {
         tbody.removeChild(tbody.lastChild);
     }
 
+    if (typeof ascending !== 'boolean') {
+        BuildTableBody(reposAsObjects, tbody);
+        return;
+    }
     BuildTableBody(SortObjectsByProperty(reposObjects, columnSort, ascending), tbody);
 }
 
@@ -89,7 +113,6 @@ function GetReposFromWeb(repoPerPage, page=1) {
     // Обновление элементов перед загрузкой
     reposAsObjects = [];
     UpdateElementsBeforTableBuilding();
-
 
     // Web запрос
     let resp = fetch(url, { method: 'GET' });
@@ -116,6 +139,7 @@ function GetReposFromWeb(repoPerPage, page=1) {
     });
 }
 
+// !!!приватная бы
 function BuildTableBody(objectsRepo, rootTBody) {
     for (const repo of objectsRepo) {
         let row = document.createElement("tr");
@@ -129,6 +153,35 @@ function BuildTableBody(objectsRepo, rootTBody) {
         cols.forEach(r => row.appendChild(r));
         rootTBody.appendChild(row);
     }
+}
+//#endregion
+
+
+//#region Вспомогательные функции
+function RestToZeroColumnOrder() {
+    for (const col of document.getElementsByClassName('colRepo')) {
+        col.dataset.order = 0;
+    }
+}
+
+function UpdateElementsBeforTableBuilding(params) {
+    document.querySelectorAll('.tfoot_button').forEach(b=>b.style.backgroundColor = 'white');
+    
+    // Восстановление закраски нажатой кнопки
+    GetPressedButtonPerList().style.backgroundColor = 'rgb(137, 156, 165)';
+    
+    // Прятать кнопку Назад, если на 1 странице
+    if (currentPage == 1)
+        document.getElementById('but_page_prev').style.display='none';
+    else
+        document.getElementById('but_page_prev').style.display='block';
+
+    // Сбросить атрибут сортировки у столбцов
+    RestToZeroColumnOrder();
+}
+
+function GetPressedButtonPerList() {
+    return document.getElementById('but_per_list_' + currentPerPage);
 }
 
 function CreateObjectRepo(name, lang, pushed, isArch, link) {
@@ -196,3 +249,4 @@ function FormatDate(dateStr, mask) {
         }
     }
 }
+//#endregion
