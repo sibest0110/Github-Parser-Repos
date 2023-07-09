@@ -3,6 +3,9 @@ let currentPage = 1;
 let currentPerPage = 10;
 let reposAsObjects = [];
 let tbody = document.getElementById("table_body");
+let defaultSelectedColor = 'rgb(137, 156, 165)';
+let defaultNonSelectedColor = 'white';
+    
 
 // FUNCTIONs
 function InitPage() {
@@ -10,7 +13,12 @@ function InitPage() {
     b10.dispatchEvent(new Event("click"));
 }
 
-//#region Обработчики кнопок внизу таблицы
+//#region Обработчики нажатий
+function SelectRepoRow_handler(row) {
+    RestToEmptyRowSelection();
+    row.style.backgroundColor = defaultSelectedColor;
+    row.dataset.selected = true;
+}
 
 function ButtonChangePage_handler(page) {
     currentPage = page;
@@ -18,7 +26,7 @@ function ButtonChangePage_handler(page) {
     GetReposFromWeb(currentPerPage, currentPage);
 }
 
-function ButtonPerList_Handler(but) {
+function ButtonPerList_handler(but) {
     GetReposFromWeb(but.id.split('_').pop(), currentPage);
 }
 //#endregion
@@ -141,8 +149,15 @@ function GetReposFromWeb(repoPerPage, page=1) {
 
 // !!!приватная бы
 function BuildTableBody(objectsRepo, rootTBody) {
+    let rowClassName = 'repoRow';
     for (const repo of objectsRepo) {
         let row = document.createElement("tr");
+        row.className = rowClassName;
+        row.onclick = function () {
+            SelectRepoRow_handler(row);
+        };
+
+        row.style.backgroundColor = defaultNonSelectedColor;
         let cols = [
             CreateTD(repo["name"]),
             CreateTD(repo["language"]),
@@ -158,6 +173,13 @@ function BuildTableBody(objectsRepo, rootTBody) {
 
 
 //#region Вспомогательные функции
+function RestToEmptyRowSelection() {
+    for (const row of document.getElementsByClassName('repoRow')) {
+        row.style.backgroundColor = defaultNonSelectedColor;
+        row.dataset.selected = false;
+    }
+}
+
 function RestToZeroColumnOrder() {
     for (const col of document.getElementsByClassName('colRepo')) {
         col.dataset.order = 0;
@@ -165,10 +187,10 @@ function RestToZeroColumnOrder() {
 }
 
 function UpdateElementsBeforTableBuilding(params) {
-    document.querySelectorAll('.tfoot_button').forEach(b=>b.style.backgroundColor = 'white');
+    document.querySelectorAll('.tfoot_button').forEach(b=>b.style.backgroundColor = defaultNonSelectedColor);
     
     // Восстановление закраски нажатой кнопки
-    GetPressedButtonPerList().style.backgroundColor = 'rgb(137, 156, 165)';
+    GetPressedButtonPerList().style.backgroundColor = defaultSelectedColor;
     
     // Прятать кнопку Назад, если на 1 странице
     if (currentPage == 1)
@@ -178,6 +200,9 @@ function UpdateElementsBeforTableBuilding(params) {
 
     // Сбросить атрибут сортировки у столбцов
     RestToZeroColumnOrder();
+
+    // Сбросить выделение строки Репо
+    RestToEmptyRowSelection();
 }
 
 function GetPressedButtonPerList() {
