@@ -108,6 +108,7 @@ function GetReposFromObjects(reposObjects, columnSort = '', ascending = null) {
 
     if (typeof ascending !== 'boolean') {
         BuildTableBody(reposAsObjects, tbody);
+        SetLoaderVisibility(false);
         return;
     }
     BuildTableBody(SortObjectsByProperty(reposObjects, columnSort, ascending), tbody);
