@@ -99,6 +99,8 @@ function SortObjectsByProperty(objects, property = '', ascending = true) {
 //#region Формирование таблиц
 
 function GetReposFromObjects(reposObjects, columnSort = '', ascending = null) {
+    SetLoaderVisibility(true);
+
     // Очистка таблицы от предыдущих значений
     while (tbody.hasChildNodes()) {
         tbody.removeChild(tbody.lastChild);
@@ -109,9 +111,11 @@ function GetReposFromObjects(reposObjects, columnSort = '', ascending = null) {
         return;
     }
     BuildTableBody(SortObjectsByProperty(reposObjects, columnSort, ascending), tbody);
+    SetLoaderVisibility(false);
 }
 
 function GetReposFromWeb(repoPerPage, page=1) {
+    SetLoaderVisibility(true);
     let url = `https://api.github.com/orgs/microsoft/repos?per_page=${repoPerPage}&page=${page}`;
 
     // Актуализация глобальных переменных
@@ -144,6 +148,7 @@ function GetReposFromWeb(repoPerPage, page=1) {
                 BuildTableBody([objRepo], tbody);
             };
         });
+        SetLoaderVisibility(false);
     });
 }
 
@@ -173,6 +178,10 @@ function BuildTableBody(objectsRepo, rootTBody) {
 
 
 //#region Вспомогательные функции
+function SetLoaderVisibility(isVisible) {
+    document.getElementById("loader").dataset.visible = isVisible == true ? '1' : '0';
+}
+
 function RestToEmptyRowSelection() {
     for (const row of document.getElementsByClassName('repoRow')) {
         row.style.backgroundColor = defaultNonSelectedColor;
