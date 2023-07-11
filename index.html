@@ -8,7 +8,7 @@
 </head>
 
 <body onload="/*InitPage();*/">
-    <div id="work_place">
+    <div id="block_repos">
         <table id="table_repos">
             <colgroup>
                 <col style="width: 30%;">
@@ -51,6 +51,32 @@
     </div>
     <div id="loader" data-visible="0">
         <img src="./images/loader.gif" alt="Загрузка содержимого">
+    </div>
+    <div id="modal_background" data-visible="1" >
+        <div id="modal_active">
+            <div id="modal_close">
+                <img id="button_close_modal" src="./images/x.svg" alt="Закрыть окно с issues" onclick="SetModalVisibility(false)">
+            </div>
+            <div id="modal_issues">
+                <table id="table_issues">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 60%;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Дата создания</th>
+                            <th>Название</th>
+                            <th>Содержание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <script src="./scripts/main.js"></script>
 </body>
