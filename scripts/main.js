@@ -1,8 +1,11 @@
 // GLOBALs
+let organisationName = 'microsoft';
 let currentPage = 1;
 let currentPerPage = 10;
 let reposAsObjects = [];
 let tbody = document.getElementById("table_body");
+let modal = document.getElementById('modal_background');
+
 let defaultSelectedColor = 'rgb(137, 156, 165)';
 let defaultNonSelectedColor = 'white';
     
@@ -14,6 +17,48 @@ function InitPage() {
 }
 
 //#region Обработчики нажатий
+function OpenIssuesModal_handler(row) {
+    SetLoaderVisibility(true);
+    let i_tbody = document.querySelector('#table_issues tbody');
+    let repoName = row.getElementsByClassName('td_name')[0].textContent;
+    let i_PerPage = 10;
+    i_url = `https://api.github.com/repos/${organisationName}/${repoName}/issues?state=all&sort=created&per_page=${i_PerPage}`;
+
+    let i_resp = fetch(i_url, { method: 'GET' });
+    i_resp.then(r =>{
+        r.json().then(json => {
+            if (r.status!=200){
+                alert(`HTTP status code = ${r.status}\n\n${json['message']}`);
+                SetLoaderVisibility(false)
+                return;
+            }
+            
+            // Если ответ успешный
+            
+            // Очистка i_таблицы после успешной загрузки
+            while (i_tbody.hasChildNodes()) {
+                i_tbody.removeChild(i_tbody.lastChild);
+            }
+            
+            // Обработка ответа
+            for (const j of json) {
+                let i_tr = document.createElement('tr');
+                i_tbody.appendChild(i_tr);
+
+                for (const prop of [
+                    FormatDate(j['created_at'], 'H:M d W y'), 
+                    j['title'], 
+                    j['body']]) {
+                    let i_td = CreateTD(prop);
+                    i_tr.appendChild(i_td);
+                };
+            };
+            SetModalVisibility(true);
+            SetLoaderVisibility(false);
+        });
+    });
+}
+
 function SelectRepoRow_handler(row) {
     RestToEmptyRowSelection();
     row.style.backgroundColor = defaultSelectedColor;
@@ -162,14 +207,17 @@ function BuildTableBody(objectsRepo, rootTBody) {
         row.onclick = function () {
             SelectRepoRow_handler(row);
         };
+        row.ondblclick = function () {
+            OpenIssuesModal_handler(row);
+        }
 
         row.style.backgroundColor = defaultNonSelectedColor;
         let cols = [
-            CreateTD(repo["name"]),
-            CreateTD(repo["language"]),
-            CreateTD(FormatDate(repo["pushed_at"], 'd.m.y H:M')),
-            CreateTD(repo["archived"] == true ? 'да' : 'нет'),
-            CreateTD(repo["html_url"], true),
+            CreateTD(repo["name"], "td_name"),
+            CreateTD(repo["language"], "td_language"),
+            CreateTD(FormatDate(repo["pushed_at"], 'd.m.y H:M'), "td_pushed_at"),
+            CreateTD(repo["archived"] == true ? 'да' : 'нет', "td_archived"),
+            CreateTD(repo["html_url"], "td_html_url", true),
         ]
         cols.forEach(r => row.appendChild(r));
         rootTBody.appendChild(row);
@@ -179,6 +227,15 @@ function BuildTableBody(objectsRepo, rootTBody) {
 
 
 //#region Вспомогательные функции
+function SetModalVisibility(isVisible) {
+    if (isVisible == false || isVisible == null) {
+        modal.dataset.visible = '0';
+    }
+    else {
+        modal.dataset.visible = '1';
+    }
+}
+
 function SetLoaderVisibility(isVisible) {
     document.getElementById("loader").dataset.visible = isVisible == true ? '1' : '0';
 }
@@ -229,8 +286,12 @@ function CreateObjectRepo(name, lang, pushed, isArch, link) {
     return repo;
 }
 
-function CreateTD(content, isLink = false) {
+function CreateTD(content, className = '', isLink = false) {
     let td = document.createElement('td');
+
+    if (className !== '') {
+        td.className = className;
+    }
 
     if (isLink) {
         let a = document.createElement('a');
@@ -246,7 +307,33 @@ function CreateTD(content, isLink = false) {
 }
 
 function FormatDate(dateStr, mask) {
+    monthNameMap1 = [
+        'Январь',
+        'Февраль',
+        'Март',
+        'Апрель',
+        'Май',
+        'Июнь',
+        'Июль',
+        'Август',
+        'Сентябрь',
+        'Октябрь',
+        'Ноябрь',
+        'Декабрь'];
 
+    monthNameMap2 = [
+        'Января',
+        'Февраля',
+        'Марта',
+        'Апреля',
+        'Мая',
+        'Июня',
+        'Июля',
+        'Августа',
+        'Сентября',
+        'Октября',
+        'Ноября',
+        'Декабря'];
 
     let date = new Date(dateStr);
     y = date.getFullYear();
@@ -255,6 +342,8 @@ function FormatDate(dateStr, mask) {
     _h = addLeftZeroIfNeed(date.getHours());
     _m = addLeftZeroIfNeed(date.getMinutes());
     _s = addLeftZeroIfNeed(date.getSeconds());
+    _m_word1 = monthNameMap1[date.getMonth()];
+    _m_word2 = monthNameMap2[date.getMonth()];
 
     map = {
         "y": y,
@@ -263,6 +352,8 @@ function FormatDate(dateStr, mask) {
         "H": _h,
         "M": _m,
         "S": _s,
+        "w": _m_word1,
+        "W": _m_word2
     };
     result = '';
     for (const key of mask) {
