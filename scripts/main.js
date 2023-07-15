@@ -55,7 +55,7 @@ function OpenIssuesModal_handler(row) {
                 };
             };
 
-            document.getElementById('modal_title').textContent = `Репозиторий ${repoName}:`
+            document.getElementById('modal_title').textContent = `Issues по "${repoName}":`
             SetModalVisibility(true);
             SetLoaderVisibility(false);
         });
