@@ -6,6 +6,7 @@ let reposAsObjects = [];
 let tbody = document.getElementById("table_body");
 let modal = document.getElementById('modal_background');
 
+// TODO: Вынести в dataset в CSS
 let defaultSelectedColor = 'rgb(137, 156, 165)';
 let defaultNonSelectedColor = 'white';
     
@@ -21,7 +22,7 @@ function OpenIssuesModal_handler(row) {
     SetLoaderVisibility(true);
     let i_tbody = document.querySelector('#table_issues tbody');
     let repoName = row.getElementsByClassName('td_name')[0].textContent;
-    let i_PerPage = 10;
+    let i_PerPage = 100;
     i_url = `https://api.github.com/repos/${organisationName}/${repoName}/issues?state=all&sort=created&per_page=${i_PerPage}`;
 
     let i_resp = fetch(i_url, { method: 'GET' });
@@ -53,6 +54,8 @@ function OpenIssuesModal_handler(row) {
                     i_tr.appendChild(i_td);
                 };
             };
+
+            document.getElementById('modal_title').textContent = `Репозиторий ${repoName}:`
             SetModalVisibility(true);
             SetLoaderVisibility(false);
         });
@@ -230,6 +233,7 @@ function BuildTableBody(objectsRepo, rootTBody) {
 function SetModalVisibility(isVisible) {
     if (isVisible == false || isVisible == null) {
         modal.dataset.visible = '0';
+        document.getElementById('modal_title').textContent = '';
     }
     else {
         modal.dataset.visible = '1';
