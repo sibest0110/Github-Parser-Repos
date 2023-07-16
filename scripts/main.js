@@ -229,9 +229,11 @@ function SetModalVisibility(isVisible) {
     if (isVisible == false || isVisible == null) {
         modal.dataset.visible = '0';
         document.getElementById('modal_title').textContent = '';
+        document.querySelector('body').classList.remove('no-scroll');
     }
     else {
         modal.dataset.visible = '1';
+        document.querySelector('body').classList.add('no-scroll');
     }
 }
 
