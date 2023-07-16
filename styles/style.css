@@ -1,34 +1,53 @@
-html {
-   --default-hover-color: rgba(74, 135, 163, 0.24);
-
-   --default-th-background-color: aliceblue;
-   --modal-background-color: rgba(0, 0, 0, 0.37);
-   --modal-active-color: rgb(255, 255, 255);
-
-   --selected-button-color: rgb(137, 156, 165);
-   --non-selected-button-color: white;
+* {
+   --th-background-color: var(--background-front-color);
+   --non-selected-color: var(--background-front-color);
+   --modal-active-color: var(--background-back-color);
 
    --border-width: 2px;
-   --border-color: rgb(74, 135, 163);
    --border: var(--border-width) solid var(--border-color);
 }
 
-/* Цвета выделенных объектов vvv */
-
-* [data-selected='1'] {
-   background-color: var(--selected-button-color);
+html {
+   --font-color: black;
+   --modal-background-color: rgba(0, 0, 0, 0.37);
+   --background-front-color: white;
+   --background-back-color: white;
+   --default-hover-color: rgba(74, 135, 163, 0.24);
+   --selected-color: rgb(137, 156, 165);
+   --border-color: rgb(74, 135, 163);
 }
 
-* [data-selected='0'] {
-   background-color: var(--non-selected-button-color);
+/* Тёмная тема */
+html[data-dark='1'] {
+   --font-color: white;
+   --modal-background-color: rgba(58, 58, 58, 0.885);
+   --background-front-color: rgb(58, 58, 58);
+   --background-back-color: rgb(37, 37, 37);
+   --default-hover-color: rgb(240, 110, 60);
+   --selected-color: rgb(240, 85, 33);
+   --border-color: rgb(74, 135, 163);
 }
 
-/* Цвета выделенных объектов ^^^ */
+/* А для светлой не делать инверсию! */
+/* Тёмная тема */
+/* #loader img {
+   filter: invert(1);
+}
+
+#modal_close img {
+   filter: invert(1);
+} */
+
+
+
+body {
+   background-color: var(--background-back-color);
+   color: var(--font-color);
+}
 
 .no-scroll {
    overflow-y: hidden;
 }
-
 
 table {
    margin: 0;
@@ -44,7 +63,7 @@ table {
 table th {
    position: sticky;
    top: 0px;
-   background-color: var(--default-th-background-color);
+   background-color: var(--th-background-color);
    user-select: none;
 }
 
@@ -65,6 +84,19 @@ tbody td:first-child {
 thead tr:first-child th {
    border-top: var(--border);
 }
+
+/* Цвета выделенных объектов vvv */
+
+* [data-selected='1'] {
+   background-color: var(--selected-color);
+}
+
+* [data-selected='0'] {
+   background-color: var(--non-selected-color);
+}
+
+/* Цвета выделенных объектов ^^^ */
+
 
 /* Сортировка столбцов vvv */
 .colRepo[data-order="-1"]::before {
@@ -177,7 +209,6 @@ tbody tr:hover {
 
 #modal_background {
    position: fixed;
-   /* background-color: rgba(0, 0, 0, 0.37); */
    background-color: var(--modal-background-color);
 
    top: 0;
