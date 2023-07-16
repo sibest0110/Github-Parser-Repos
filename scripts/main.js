@@ -5,10 +5,6 @@ let currentPerPage = 10;
 let reposAsObjects = [];
 let tbody = document.getElementById("table_body");
 let modal = document.getElementById('modal_background');
-
-// TODO: Вынести в dataset в CSS
-let defaultSelectedColor = 'rgb(137, 156, 165)';
-let defaultNonSelectedColor = 'white';
     
 
 // FUNCTIONs
@@ -64,8 +60,7 @@ function OpenIssuesModal_handler(row) {
 
 function SelectRepoRow_handler(row) {
     RestToEmptyRowSelection();
-    row.style.backgroundColor = defaultSelectedColor;
-    row.dataset.selected = true;
+    row.dataset.selected = '1';
 }
 
 function ButtonChangePage_handler(page) {
@@ -214,7 +209,7 @@ function BuildTableBody(objectsRepo, rootTBody) {
             OpenIssuesModal_handler(row);
         }
 
-        row.style.backgroundColor = defaultNonSelectedColor;
+        row.dataset.selected = '0';
         let cols = [
             CreateTD(repo["name"], "td_name"),
             CreateTD(repo["language"], "td_language"),
@@ -246,8 +241,7 @@ function SetLoaderVisibility(isVisible) {
 
 function RestToEmptyRowSelection() {
     for (const row of document.getElementsByClassName('repoRow')) {
-        row.style.backgroundColor = defaultNonSelectedColor;
-        row.dataset.selected = false;
+        row.dataset.selected = '0';
     }
 }
 
@@ -258,10 +252,10 @@ function RestToZeroColumnOrder() {
 }
 
 function UpdateElementsBeforTableBuilding(params) {
-    document.querySelectorAll('.tfoot_button').forEach(b=>b.style.backgroundColor = defaultNonSelectedColor);
+    document.querySelectorAll('.tfoot_button').forEach(b=>b.dataset.selected = '0');
     
     // Восстановление закраски нажатой кнопки
-    GetPressedButtonPerList().style.backgroundColor = defaultSelectedColor;
+    GetPressedButtonPerList().dataset.selected = '1';
     
     // Прятать кнопку Назад, если на 1 странице
     if (currentPage == 1)

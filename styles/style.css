@@ -2,10 +2,25 @@ html {
    --default-hover-color: rgba(74, 135, 163, 0.24);
    --default-th-background-color: aliceblue;
 
+   --selected-button-color: rgb(137, 156, 165);
+   --non-selected-button-color: white;
+
    --border-width: 2px;
    --border-color: rgb(74, 135, 163);
    --border: var(--border-width) solid var(--border-color);
 }
+
+/* Цвета выделенных объектов vvv */
+
+/* .tfoot_button[data-selected='1']{ */
+* [data-selected='1']{
+   background-color: var(--selected-button-color);
+}
+* [data-selected='0']{
+   background-color: var(--non-selected-button-color);
+}
+/* Цвета выделенных объектов ^^^ */
+
 
 table {
    margin: 0;
