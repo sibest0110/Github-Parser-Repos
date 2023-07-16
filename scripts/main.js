@@ -5,7 +5,7 @@ let currentPerPage = 10;
 let reposAsObjects = [];
 let tbody = document.getElementById("table_body");
 let modal = document.getElementById('modal_background');
-    
+
 
 // FUNCTIONs
 function InitPage() {
@@ -22,36 +22,42 @@ function OpenIssuesModal_handler(row) {
     i_url = `https://api.github.com/repos/${organisationName}/${repoName}/issues?state=all&sort=created&per_page=${i_PerPage}`;
 
     let i_resp = fetch(i_url, { method: 'GET' });
-    i_resp.then(r =>{
+    i_resp.then(r => {
         r.json().then(json => {
-            if (r.status!=200){
+            if (r.status != 200) {
                 alert(`HTTP status code = ${r.status}\n\n${json['message']}`);
                 SetLoaderVisibility(false)
                 return;
             }
-            
+
             // Если ответ успешный
-            
+
             // Очистка i_таблицы после успешной загрузки
             while (i_tbody.hasChildNodes()) {
                 i_tbody.removeChild(i_tbody.lastChild);
             }
-            
+
             // Обработка ответа
             for (const j of json) {
                 let i_tr = document.createElement('tr');
                 i_tbody.appendChild(i_tr);
 
                 for (const prop of [
-                    FormatDate(j['created_at'], 'H:M d W y'), 
-                    j['title'], 
+                    FormatDate(j['created_at'], 'H:M d W y'),
+                    j['title'],
                     j['body']]) {
                     let i_td = CreateTD(prop);
                     i_tr.appendChild(i_td);
                 };
             };
 
-            document.getElementById('modal_title').textContent = `Issues по "${repoName}":`
+            if (json.length != 0) {
+                document.getElementById('modal_title').textContent = `Issues по "${repoName}":`
+            }
+            else {
+                document.getElementById('modal_title').textContent = `Issues по "${repoName}" ОТСУТСТВУЮТ.`
+            }
+
             SetModalVisibility(true);
             SetLoaderVisibility(false);
         });
@@ -99,18 +105,18 @@ function SortColumn_handler(columnHead) {
 
 // !!!приватная бы
 function SortObjectsByProperty(objects, property = '', ascending = true) {
-    if (property === ''){
+    if (property === '') {
         return objects;
     }
 
     let sorted = [];
     Object.assign(sorted, objects);
 
-    sorted.sort(function(a,b){
+    sorted.sort(function (a, b) {
         if (!ascending) {
             [a, b] = [b, a];
         }
-        
+
         // Формата даты
         if (property === 'pushed_at') {
             if (Date.parse(a[property]) > Date.parse(b[property])) {
@@ -122,8 +128,7 @@ function SortObjectsByProperty(objects, property = '', ascending = true) {
             return 0;
         }
         // Формата строки
-        else
-        {
+        else {
             if (String(a[property]).toLowerCase() > String(b[property]).toLowerCase()) {
                 return 1;
             }
@@ -158,7 +163,7 @@ function GetReposFromObjects(reposObjects, columnSort = '', ascending = null) {
     SetLoaderVisibility(false);
 }
 
-function GetReposFromWeb(repoPerPage, page=1) {
+function GetReposFromWeb(repoPerPage, page = 1) {
     SetLoaderVisibility(true);
     let url = `https://api.github.com/orgs/microsoft/repos?per_page=${repoPerPage}&page=${page}`;
 
@@ -172,9 +177,9 @@ function GetReposFromWeb(repoPerPage, page=1) {
 
     // Web запрос
     let resp = fetch(url, { method: 'GET' });
-    resp.then(r =>{
+    resp.then(r => {
         r.json().then(json => {
-            if (r.status!=200){
+            if (r.status != 200) {
                 alert(`HTTP status code = ${r.status}\n\n${json['message']}`);
                 return;
             }
@@ -254,16 +259,16 @@ function RestToZeroColumnOrder() {
 }
 
 function UpdateElementsBeforTableBuilding(params) {
-    document.querySelectorAll('.tfoot_button').forEach(b=>b.dataset.selected = '0');
-    
+    document.querySelectorAll('.tfoot_button').forEach(b => b.dataset.selected = '0');
+
     // Восстановление закраски нажатой кнопки
     GetPressedButtonPerList().dataset.selected = '1';
-    
+
     // Прятать кнопку Назад, если на 1 странице
     if (currentPage == 1)
-        document.getElementById('but_page_prev').style.display='none';
+        document.getElementById('but_page_prev').style.display = 'none';
     else
-        document.getElementById('but_page_prev').style.display='block';
+        document.getElementById('but_page_prev').style.display = 'block';
 
     // Сбросить атрибут сортировки у столбцов
     RestToZeroColumnOrder();
