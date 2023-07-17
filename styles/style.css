@@ -15,6 +15,7 @@ html {
    --default-hover-color: rgba(74, 135, 163, 0.24);
    --selected-color: rgb(137, 156, 165);
    --border-color: rgb(74, 135, 163);
+   --inverse-picture: 0;
 }
 
 /* Тёмная тема */
@@ -26,19 +27,8 @@ html[data-dark='1'] {
    --default-hover-color: rgb(240, 110, 60);
    --selected-color: rgb(240, 85, 33);
    --border-color: rgb(74, 135, 163);
+   --inverse-picture: 1;
 }
-
-/* А для светлой не делать инверсию! */
-/* Тёмная тема */
-/* #loader img {
-   filter: invert(1);
-}
-
-#modal_close img {
-   filter: invert(1);
-} */
-
-
 
 body {
    background-color: var(--background-back-color);
@@ -195,6 +185,10 @@ tbody tr:hover {
    z-index: 999999;
 }
 
+#loader img {
+   filter: invert(var(--inverse-picture));
+}
+
 /* Окно загрузки ^^^ */
 
 
@@ -253,6 +247,7 @@ tbody tr:hover {
 #modal_close img {
    width: 24px;
    height: 24px;
+   filter: invert(var(--inverse-picture));
 }
 
 #modal_title {
