@@ -7,36 +7,36 @@
    --border: var(--border-width) solid var(--border-color);
 }
 
-html {
-   --font-color: black;
-   --modal-background-color: rgba(0, 0, 0, 0.37);
-   --background-front-color: #ffffff;
-   --background-back-color: #ffffff;
-   --default-hover-color: rgba(74, 135, 163, 0.24);
-   --selected-color: rgb(137, 156, 165);
-   --border-color: rgb(74, 135, 163);
-   --inverse-picture: 0;
-   --href-default-color: #0000ee;
-   --href-visited-color: #551A8B;
-}
-
 /* Тёмная тема */
 html[data-dark='1'] {
    --font-color: #ffffff;
-   --modal-background-color: rgba(58, 58, 58, 0.885);
-   --background-front-color: rgb(58, 58, 58);
-   --background-back-color: rgb(37, 37, 37);
-   --default-hover-color: rgb(240, 110, 60);
-   --selected-color: rgb(240, 85, 33);
-   --border-color: rgb(74, 135, 163);
+   --modal-background-color: #3a3a3ae2;
+   --background-front-color: #3a3a3a;
+   --background-back-color: #252525;
+   --default-hover-color: #f06e3c;
+   --selected-color: #f05521;
+   --border-color: #4a87a3;
    --inverse-picture: 1;
    --href-default-color: #eeee00;
    --href-visited-color: #eeaa22;
 }
 
+html {
+   --font-color: #000000;
+   --modal-background-color: #0000005e;
+   --background-front-color: #ffffff;
+   --background-back-color: #ffffff;
+   --default-hover-color: #4a87a33d;
+   --selected-color: #899ca5;
+   --border-color: #4a87a3;
+   --inverse-picture: 0;
+   --href-default-color: #0000ee;
+   --href-visited-color: #551A8B;
+}
+
+
 a {
    color: var(--href-default-color);
-   
 }
 
 a:visited {
