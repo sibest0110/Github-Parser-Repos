@@ -1,7 +1,8 @@
 * {
    --th-background-color: var(--background-front-color);
-   --non-selected-color: var(--background-front-color);
-   --modal-active-color: var(--background-back-color);
+   --non-selected-background-color: var(--background-front-color);
+   --modal-active-background-color: var(--background-back-color);
+   --modal-issues-background-color: var(--background-front-color);
 
    --border-width: 2px;
    --border: var(--border-width) solid var(--border-color);
@@ -11,9 +12,10 @@
 /* Тёмная тема */
 html[data-color-theme='dark'] {
    --font-color: #ffffff;
-   --modal-background-color: #3a3a3ae2;
+   --modal-background-color: #333333e2;
    --background-front-color: #333333;
    --background-back-color: #1f1f1f;
+   --background-header-color: #282828;
    --default-hover-color: #f06e3c;
    --selected-color: #f05521;
    --border-color: #4a87a3;
@@ -27,6 +29,7 @@ html {
    --modal-background-color: #0000005e;
    --background-front-color: #ffffff;
    --background-back-color: #ffffff;
+   --background-header-color: #f0f0f0;
    --default-hover-color: #4a87a33d;
    --selected-color: #899ca5;
    --border-color: #4a87a3;
@@ -67,7 +70,7 @@ table {
 table th {
    position: sticky;
    top: 0px;
-   background-color: var(--th-background-color);
+   background-color: var(--background-header-color);
    user-select: none;
 }
 
@@ -96,7 +99,7 @@ thead tr:first-child th {
 }
 
 * [data-selected='0'] {
-   background-color: var(--non-selected-color);
+   background-color: var(--non-selected-background-color);
 }
 
 /* Цвета выделенных объектов ^^^ */
@@ -244,7 +247,7 @@ tbody tr:hover {
    max-height: 90vh;
 
    border-radius: 10px;
-   background-color: var(--modal-active-color);
+   background-color: var(--modal-active-background-color);
    cursor: default;
    padding: 35px 13px 15px 15px;
    margin-top: 20px;
@@ -278,6 +281,7 @@ tbody tr:hover {
 }
 
 #modal_issues {
+   background-color: var(--modal-issues-background-color);
    height: auto;
    max-height: calc(90vh - 35px);
 
