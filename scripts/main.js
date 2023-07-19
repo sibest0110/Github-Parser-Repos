@@ -14,6 +14,19 @@ function InitPage() {
 }
 
 //#region Обработчики нажатий
+function ChangeTheme_handler(buttonDiv) {
+    let html = document.querySelector('html');
+    let currentTheme = html.dataset.colorTheme;
+    if (currentTheme == 'dark') {
+        html.dataset.colorTheme = '';
+        buttonDiv.textContent = 'Тёмная тема';
+    }
+    else {
+        html.dataset.colorTheme = 'dark';
+        buttonDiv.textContent = 'Светлая тема';
+    }
+}
+
 function OpenIssuesModal_handler(row) {
     SetLoaderVisibility(true);
     let i_tbody = document.querySelector('#table_issues tbody');

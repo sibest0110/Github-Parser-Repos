@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-dark="">
+<html data-color-theme="">
 
 <head>
     <meta charset="utf-8">
@@ -37,6 +37,9 @@
                                 <div class="tfoot_button" id="but_page_prev" onclick="ButtonChangePage_handler(currentPage-1);">&lt;</div>
                                 <div class="tfoot_button" id="but_page_cur" ondblclick="ButtonChangePage_handler(1);">1</div>
                                 <div class="tfoot_button" id="but_page_next" onclick="ButtonChangePage_handler(currentPage+1);">&gt;</div>
+                            </div>
+                            <div class="tfoot_button" id="change_theme" onclick="ChangeTheme_handler(this)">
+                                Тёмная тема
                             </div>
                             <div id="per_list">
                                 <div class="tfoot_button" id="but_per_list_10" onclick="ButtonPerList_handler(this)">10</div>
