@@ -240,7 +240,7 @@ tbody tr:hover {
    border-radius: 10px;
    background-color: var(--modal-active-color);
    cursor: default;
-   padding: 35px 15px 15px 15px;
+   padding: 35px 13px 15px 15px;
    margin-top: 20px;
 }
 
