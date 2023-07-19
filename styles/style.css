@@ -11,8 +11,8 @@
 html[data-dark='1'] {
    --font-color: #ffffff;
    --modal-background-color: #3a3a3ae2;
-   --background-front-color: #3a3a3a;
-   --background-back-color: #252525;
+   --background-front-color: #333333;
+   --background-back-color: #1f1f1f;
    --default-hover-color: #f06e3c;
    --selected-color: #f05521;
    --border-color: #4a87a3;
