@@ -120,18 +120,7 @@ thead tr:first-child th {
 #tfoot_container {
    display: flex;
    justify-content: space-between;
-}
-
-#page_selector {
-   display: flex;
-   justify-content: left;
-   margin-top: auto;
-}
-
-#per_list {
-   display: flex;
-   justify-content: right;
-   margin-top: auto;
+   padding-top: 5px;
 }
 
 #page_selector div {
@@ -143,12 +132,15 @@ thead tr:first-child th {
 }
 
 .tfoot_button {
+   display: flex;
+   justify-content: center;
+
    font-size: var(--main-font-size);
    text-align: center;
    border-radius: 10px;
    border: var(--border);
+   padding: 1px 2px;
 
-   height: 100%;
    cursor: pointer;
 
    /* Чтобы не было возможности выделить текст */
@@ -165,13 +157,23 @@ thead tr:first-child th {
    /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
    user-select: none;
 }
-#page_selector div, #per_list div {
+
+#page_selector div,
+#per_list div {
    width: 30px;
 }
 
-#change_theme{
-   padding: 0px 10px;
+#page_selector,
+#per_list,
+#change_theme {
+   display: flex;
 }
+
+#change_theme {
+   padding-left: 10px;
+   padding-right: 10px;
+}
+
 
 tbody tr:hover {
    background-color: var(--default-hover-color) !important;
